@@ -1,0 +1,13 @@
+name: learn-crystal
+version: 0.1.0
+
+authors:
+  - doongjohn <doongjohn@gmail.com>
+
+targets:
+  learn-crystal:
+    main: src/main.cr
+
+crystal: 1.9.1
+
+license: MIT
