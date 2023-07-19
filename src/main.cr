@@ -1,5 +1,4 @@
 # modules: https://codingpackets.com/blog/crystal-notes-modules/
-# blocks: https://crystal-lang.org/reference/1.9/syntax_and_semantics/blocks_and_procs.html
 
 module Learn::Crystal # <-- module is similar to csharp `static class`
   # Variable
@@ -16,13 +15,18 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
     puts "truthy"
   end
 
-  # Variable is not contained in a scope
+  unless false
+    puts "unless cond == if !(cond)"
+  end
+
+  # Flow control statements don't make a new scope in Crystal. This is inherited from Ruby.
+  # https://github.com/crystal-lang/crystal/issues/9588
   if 1 + 2 == 3
     a = 1
   else
     a = "hello"
   end
-  puts typeof(a) # : Int32 | String
+  puts typeof(a) # => Int32 | String
 
   # Constant
   HELLO = "hello"
@@ -30,13 +34,29 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
 
   # Method
   def self.hi : Nil
+    # ^^^^^ --> this means the method belongs to this module/class not the instance of it
+    #           similar to csharp static method
     puts "hi"
   end
 
   hi # <-- this is a function call
      #     `()` is optional
 
+  module Hi
+    # module can be nested
+    HELLO = "hello"
+
+    def self.say_hi
+      puts "hi"
+    end
+  end
+
+  p! Hi::HELLO
+  p! Hi.say_hi
+
   def self.run(& : Int32 -> Int32)
+    #          ^ --> this is a block
+    #                https://crystal-lang.org/reference/1.9/syntax_and_semantics/blocks_and_procs.html
     puts yield 10
   end
 
@@ -68,7 +88,7 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   puts "rest: #{rest}"
   puts "tail: #{tail}"
 
-  # Hash (hash map)
+  # Hash (key value pair)
   people = {
     "you" => "genius",
     "I'm" => "fool",
@@ -88,7 +108,7 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   print "Enter a number: "
   tuple = {1, "안녕", nil}
   i = gets
-  unless i.nil? # `unless` is same as `if !(cond)`
+  if i # <-- check nil
     begin
       i = i.to_i
     rescue ex # <-- catch exception
