@@ -267,6 +267,8 @@ class Protocol
   include Protocol::ClientInterface
 
   def initialize(@client : ClientInterface)
+    clients = [@client]
+    clients[0].protocol_send_data "wow"
   end
 
   def protocol_send_data(data)
