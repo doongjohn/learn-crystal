@@ -294,3 +294,11 @@ end
 
 p = Protocol.new(MyClient.new)
 p.protocol_send_data "hello"
+
+
+def hello(a, b, c)
+  p! a, b, c
+end
+
+t = {a: 1, b: 2, c: 3}
+hello **t
