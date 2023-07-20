@@ -60,6 +60,17 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   p! Hi.say_hi
   puts ""
 
+  # module can be declared multiple times just like namespace
+  module A
+    HELLO = "hello"
+    p! BYE
+  end
+
+  module A
+    BYE = "bye"
+  end
+  puts ""
+
   def self.run(& : Int32 -> Int32)
     #          ^ --> this is a block
     #                https://crystal-lang.org/reference/1.9/syntax_and_semantics/blocks_and_procs.html
