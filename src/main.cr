@@ -257,11 +257,11 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   p! $?.success? # => true
 end
 
-# Interface via Module
+
 class Protocol
-  module ClientInterface
-    abstract def protocol_send_data(data : Bytes)
-    abstract def protocol_read_data(data : Bytes)
+  module ClientInterface # <-- Interface via Module
+    abstract def protocol_send_data(data)
+    abstract def protocol_read_data(data)
   end
 
   include Protocol::ClientInterface
@@ -302,3 +302,28 @@ end
 
 t = {a: 1, b: 2, c: 3}
 hello **t
+
+struct StaticArray
+  def to_tuple
+    {% begin %}
+      {
+        {% for index in 0...N %}
+          self[{{index}}],
+        {% end %}
+      }
+    {% end %}
+  end
+end
+
+a = StaticArray[4, 5, 6]
+#   ^^^^^^^^^^^ <-- StaticArray is a fixed size array that is allocated on the stack
+hello *a.to_tuple
+
+def print_slice(s : Slice)
+  s.each do |elem|
+    puts elem
+  end
+end
+
+print_slice Slice[1, 2, 3]
+#           ^^^^^ <-- Slice is a fixed size array that is allocated in the heap
