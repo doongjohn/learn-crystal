@@ -160,10 +160,11 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   if i # <-- check nil
     begin
       i = i.to_i
+      puts tuple[i]
     rescue ex # <-- catch exception
       puts ex.message
     else # <-- when no exception is raised
-      puts tuple[i]
+      puts "no exception"
     end
   end
   puts ""
@@ -295,6 +296,15 @@ end
 p = Protocol.new(MyClient.new)
 p.protocol_send_data "hello"
 
+
+class MyClient
+  def hi()
+    puts "sad"
+  end
+end
+
+m = MyClient.new()
+m.hi()
 
 def hello(a, b, c)
   p! a, b, c
