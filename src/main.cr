@@ -1,13 +1,32 @@
-# modules: https://codingpackets.com/blog/crystal-notes-modules/
+# module
+# - https://codingpackets.com/blog/crystal-notes-modules/
+# - https://crystal-lang.org/reference/1.10/syntax_and_semantics/modules.html
 
-module Learn::Crystal # <-- module is similar to csharp `static class`
-                      #     but also can be used as a mixin via `include`
-  # Variable
+# module is similar to c-sharp `static class`
+# so module can not be instantiated unlike class
+# but it can be used as a mixin via `include` or `extend`
+# - An `include` makes a type include methods defined in that module as instance methods
+# - An `extend` makes a type include methods defined in that module as class methods (static method)
+module Learn::Crystal
+  # module can be nested
+  module Hi
+    private HELLO = "hello"
+
+    def self.say_hi
+      puts HELLO
+    end
+  end
+
+  Hi.say_hi
+  puts ""
+
+  # variable
   x = 10_u32
-  s = "this is string"
-  puts typeof(s) # <-- String
-  s = 1 # <-- variable shadowing
-  puts typeof(s) # <-- Int32
+  p! typeof(x) # <-- UInt32
+  s = "this is a string"
+  p! typeof(s) # <-- String
+  s = 1        # <-- variable shadowing
+  p! typeof(s) # <-- Int32
   puts ""
 
   # truthy & falsy
@@ -21,7 +40,7 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   end
   puts ""
 
-  # Flow control statements don't make a new scope in Crystal. This is inherited from Ruby.
+  # flow control statements don't make a new scope in crystal. this is inherited from ruby.
   # https://github.com/crystal-lang/crystal/issues/9588
   if 1 + 2 == 3
     a = 1
@@ -31,11 +50,12 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   puts typeof(a) # => Int32 | String
   puts ""
 
-  # Constant
+  # constant
   HELLO = "hello"
+
   # HELLO = "asd" # <-- error: already initialized constant Learn::Crystal::HELLO
 
-  # Method
+  # method
   def self.hi : Nil
     # ^^^^^ --> this means the method belongs to this module/class not the instance of it
     #           similar to csharp static method
@@ -43,21 +63,7 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   end
 
   hi # <-- this is a function call
-     #     `()` is optional
-  puts ""
-
-  # Module
-  module Hi
-    # module can be nested
-    HELLO = "hello"
-
-    def self.say_hi
-      puts "hi"
-    end
-  end
-
-  p! Hi::HELLO
-  p! Hi.say_hi
+  #        `()` is optional
   puts ""
 
   # module can be declared multiple times just like namespace
@@ -69,6 +75,7 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   module A
     BYE = "bye"
   end
+
   puts ""
 
   def self.run(& : Int32 -> Int32)
@@ -82,19 +89,21 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   end
   puts ""
 
-  # String
-  puts "s = #{s}"
-  puts %q(s = \n #{s})
-  puts %(s = \n "#{s}")
-  puts %w(this is string) # <-- split string by space
+  # string
+  puts "string interpolation #{"hello".upcase}"
+  puts %(s = \n "#{s}")             # <-- alternative delimiters
+  puts "string interpolation \#{s}" # <-- escape string interpolation
+  puts %q(s = \n #{s})              # <-- non-interpolating string literal
+  puts %w(this is a string)         # <-- this returns an array of string (split by space)
   puts ""
 
-  # Array
-  a = [2, 3] of UInt32
-  int_arr = [1, *a, 4] of UInt32
+  # array
+  a = [2, 3] of Int32
+  int_arr = [1, *a, 4] of Int32
+  #             ^^ --> splat expansion
+  #                    https://crystal-lang.org/reference/1.10/syntax_and_semantics/literals/array.html#splat-expansion
   int_arr << 5
-  puts typeof(int_arr)
-  puts ""
+  #       ^^ --> appending a value
 
   int_arr.each do |elem|
     puts elem
@@ -112,12 +121,12 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   puts "tail: #{tail}"
   puts ""
 
-  # Loop
+  # loop
   3.times do |i|
     p! i
   end
-
   puts ""
+
   res = (1..5).each do |i|
     if i == 2
       next # <-- continue
@@ -126,17 +135,17 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
     break i if i == 5
     #     ^ ^^^^^^^^^
     #     │ └─> break condition
-    #     └─> break with value
+    #     └─> return this value after breaking
   end
   p! res
   puts ""
 
   res = (3..6).each_with_index do |val, i|
-    p! ({i, val})
+    p!({i, val})
   end
   puts ""
 
-  # Hash (key value pair)
+  # hash (key value pair)
   people = {
     "you" => "genius",
     "I'm" => "fool",
@@ -153,14 +162,13 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   puts %(&&= I'm a #{people["I'm"]})
   puts ""
 
-  # Tuple
-  print "Enter a number: "
-  tuple = {1, "안녕", nil}
+  # tuple
+  tuple = {1, "안녕", 1.2}
+  print "Enter a number (0 ~ 2): "
   i = gets
   if i # <-- check nil
     begin
-      i = i.to_i
-      puts tuple[i]
+      puts "tuple[#{i}] = #{tuple[i.to_i]}"
     rescue ex # <-- catch exception
       puts ex.message
     else # <-- when no exception is raised
@@ -169,9 +177,9 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   end
   puts ""
 
-  # Class
+  # class
   class Human
-    # property name : String
+    # https://crystal-lang.org/reference/1.10/syntax_and_semantics/methods_and_instance_variables.html#getters-and-setters
     getter age : Int32 = 10
 
     def initialize(@name : String) # <-- this is the constructor
@@ -183,8 +191,8 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
     end
 
     def age=(value)
-      @age = value
       puts "age changed to: #{value} from #{@age}"
+      @age = value
     end
   end
 
@@ -193,7 +201,7 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   human.name = "Tom"
   puts ""
 
-  # Multiple assignment
+  # multiple assignment
   a = 1
   b = 2
   puts "a = #{a}, b = #{b}"
@@ -206,7 +214,7 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   puts wow
   puts ""
 
-  # Case
+  # case
   num = 10
 
   case num
@@ -238,7 +246,7 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   end
   puts ""
 
-  # Enum
+  # enum
   enum SomeEnum
     HelloFriends
     Wow
@@ -253,11 +261,12 @@ module Learn::Crystal # <-- module is similar to csharp `static class`
   # shell command
   p! `echo foo`  # => "foo\n"
   p! $?.success? # => true
+  puts ""
 
   p! `ls`
   p! $?.success? # => true
+  puts ""
 end
-
 
 class Protocol
   module ClientInterface # <-- Interface via Module
@@ -295,16 +304,19 @@ end
 
 p = Protocol.new(MyClient.new)
 p.protocol_send_data "hello"
+puts ""
 
-
+# you can extend already existing class
+# (`class` in crystal == `partial class` in c-sharp)
 class MyClient
-  def hi()
-    puts "sad"
+  def hi
+    puts "MyClient.hi"
   end
 end
 
-m = MyClient.new()
-m.hi()
+m = MyClient.new
+m.hi
+puts ""
 
 def hello(a, b, c)
   p! a, b, c
