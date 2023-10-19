@@ -7,7 +7,7 @@
 # but it can be used as a mixin via `include` or `extend`
 # - An `include` makes a type include methods defined in that module as instance methods
 # - An `extend` makes a type include methods defined in that module as class methods (static method)
-module Learn::Crystal
+module LearnCrystal
   # module can be nested
   module Hi
     private HELLO = "hello"
@@ -53,7 +53,7 @@ module Learn::Crystal
   # constant
   HELLO = "hello"
 
-  # HELLO = "asd" # <-- error: already initialized constant Learn::Crystal::HELLO
+  # HELLO = "asd" # <-- error: already initialized constant LearnCrystal::HELLO
 
   # method
   def self.hi : Nil
@@ -99,11 +99,11 @@ module Learn::Crystal
 
   # array
   a = [2, 3] of Int32
-  int_arr = [1, *a, 4] of Int32
+  a << 4
+  # ^^ --> appending a value
+  int_arr = [1, *a, 5] of Int32
   #             ^^ --> splat expansion
   #                    https://crystal-lang.org/reference/1.10/syntax_and_semantics/literals/array.html#splat-expansion
-  int_arr << 5
-  #       ^^ --> appending a value
 
   int_arr.each do |elem|
     puts elem
