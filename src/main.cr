@@ -259,11 +259,13 @@ module LearnCrystal
   puts ""
 
   # shell command
-  p! `echo foo`  # => "foo\n"
+  output = `echo foo`  # => "foo\n"
+  puts output
   p! $?.success? # => true
   puts ""
 
-  p! `ls`
+  output = `ls`
+  puts output
   p! $?.success? # => true
   puts ""
 end
