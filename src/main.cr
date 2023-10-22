@@ -169,13 +169,18 @@ module LearnCrystal
   if i # <-- check nil
     begin
       puts "tuple[#{i}] = #{tuple[i.to_i]}"
-    rescue ex # <-- catch exception
-      puts ex.message
+    rescue ex : ArgumentError
+      #    ^^^^^^^^^^^^^^^^^^ <-- catch specific exception
+      puts "exception: [#{typeof(ex)}] #{ex.message}"
+    rescue ex
+      #    ^^ <-- catch any exception
+      puts ex.inspect_with_backtrace
     else # <-- when no exception is raised
       puts "no exception"
+    ensure # <-- always run regardless of exception
+      puts ""
     end
   end
-  puts ""
 
   # class
   class Human
@@ -259,7 +264,7 @@ module LearnCrystal
   puts ""
 
   # shell command
-  output = `echo foo`  # => "foo\n"
+  output = `echo foo` # => "foo\n"
   puts output
   p! $?.success? # => true
   puts ""
