@@ -171,7 +171,7 @@ module LearnCrystal
       puts "tuple[#{i}] = #{tuple[i.to_i]}"
     rescue ex : ArgumentError
       #    ^^^^^^^^^^^^^^^^^^ <-- catch specific exception
-      puts "exception: [#{typeof(ex)}] #{ex.message}"
+      puts "exception: [#{ex.class.name}] #{ex.message}"
     rescue ex
       #    ^^ <-- catch any exception
       puts ex.inspect_with_backtrace
