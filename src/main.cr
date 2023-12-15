@@ -164,21 +164,25 @@ module LearnCrystal
 
   # tuple
   tuple = {1, "안녕", 1.2}
-  print "Enter a number (0 ~ 2): "
-  i = gets
-  if i # <-- check nil
-    begin
-      puts "tuple[#{i}] = #{tuple[i.to_i]}"
-    rescue ex : ArgumentError
-      #    ^^^^^^^^^^^^^^^^^^ <-- catch specific exception
-      puts "exception: [#{ex.class.name}] #{ex.message}"
-    rescue ex
-      #    ^^ <-- catch any exception
-      puts ex.inspect_with_backtrace
-    else # <-- when no exception is raised
-      puts "no exception"
-    ensure # <-- always run regardless of exception
-      puts ""
+
+  # exception
+  while true
+    print "Enter a number (0 ~ #{tuple.size - 1}): "
+    i = gets
+    if i # <-- check nil
+      begin
+        puts "tuple[#{i}] = #{tuple[i.to_i]}"
+      rescue ex : ArgumentError
+        #    ^^^^^^^^^^^^^^^^^^ <-- catch specific exception
+        puts "#{ex.message} (#{ex.class.name})"
+      rescue ex
+        #    ^^ <-- catch any exception
+        puts ex.inspect_with_backtrace
+      else # <-- when no exception is raised
+        break
+      ensure # <-- always run regardless of exception
+        puts ""
+      end
     end
   end
 
