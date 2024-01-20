@@ -40,6 +40,10 @@ module LearnCrystal
   end
   puts ""
 
+  # ternary operator
+  p! val = true ? 1 : 2
+  puts ""
+
   # flow control statements don't make a new scope in crystal. this is inherited from ruby.
   # https://github.com/crystal-lang/crystal/issues/9588
   if 1 + 2 == 3
@@ -90,11 +94,11 @@ module LearnCrystal
   puts ""
 
   # string
-  puts "string interpolation #{"hello".upcase}"
-  puts %(s = \n "#{s}")             # <-- alternative delimiters
-  puts "string interpolation \#{s}" # <-- escape string interpolation
-  puts %q(s = \n #{s})              # <-- non-interpolating string literal
-  puts %w(this is a string)         # <-- this returns an array of string (split by space)
+  puts %(s=\t"#{s}")                       # <-- alternative string delimiters
+  puts %q(s=\t#{s})                        # <-- non-interpolating string literal
+  puts "#{"hello".upcase}"                 # <-- string interpolation
+  puts "escape string interpolation \#{s}" # <-- escape string interpolation
+  puts %w(this is a string)                # <-- this returns an array of string (split by space)
   puts ""
 
   # array
@@ -164,27 +168,18 @@ module LearnCrystal
 
   # tuple
   tuple = {1, "안녕", 1.2}
-
-  # exception
-  while true
-    print "Enter a number (0 ~ #{tuple.size - 1}): "
-    i = gets
-    if i # <-- check nil
-      begin
-        puts "tuple[#{i}] = #{tuple[i.to_i]}"
-      rescue ex : ArgumentError
-        #    ^^^^^^^^^^^^^^^^^^ <-- catch specific exception
-        puts "#{ex.message} (#{ex.class.name})"
-      rescue ex
-        #    ^^ <-- catch any exception
-        puts ex.inspect_with_backtrace
-      else # <-- when no exception is raised
-        break
-      ensure # <-- always run regardless of exception
-        puts ""
-      end
+  print "Enter a number (0 ~ 2): "
+  i = gets
+  if i # <-- check nil
+    begin
+      puts "tuple[#{i}] = #{tuple[i.to_i]}"
+    rescue ex # <-- catch exception
+      puts ex.message
+    else # <-- when no exception is raised
+      puts "no exception"
     end
   end
+  puts ""
 
   # class
   class Human
@@ -195,12 +190,12 @@ module LearnCrystal
     end
 
     def name=(value)
-      puts "name changed to: #{value} from #{@name}"
+      puts "name changed: from #{@name} to #{value}"
       @name = value
     end
 
     def age=(value)
-      puts "age changed to: #{value} from #{@age}"
+      puts "age changed: from #{@age} to #{value}"
       @age = value
     end
   end
@@ -268,15 +263,27 @@ module LearnCrystal
   puts ""
 
   # shell command
-  output = `echo foo` # => "foo\n"
-  puts output
-  p! $?.success? # => true
-  puts ""
+  shell =
+    if Process.find_executable("nu")
+      "nu"
+    elsif Process.find_executable("bash")
+      "bash"
+    else
+      ""
+    end
+  if !shell.empty?
+    puts "running shell command..."
+    output = `#{shell} -c "echo foo"`
+    puts output    # => "foo\n"
+    p! $?.success? # => true
+    puts ""
 
-  output = `ls`
-  puts output
-  p! $?.success? # => true
-  puts ""
+    puts "running shell command..."
+    output = `#{shell} -c ls`
+    puts output
+    p! $?.success? # => true
+    puts ""
+  end
 end
 
 class Protocol
