@@ -8,6 +8,17 @@
 # - An `include` makes a type include methods defined in that module as instance methods
 # - An `extend` makes a type include methods defined in that module as class methods (static method)
 module LearnCrystal
+  # check os
+  # https://crystal-lang.org/reference/1.11/syntax_and_semantics/compile_time_flags.html
+  {% if flag?(:linux) %}
+    puts "Linux"
+  {% elsif flag?(:darwin) %}
+    puts "Mac"
+  {% elsif flag?(:win32) %}
+    puts "Windows"
+  {% end %}
+  puts ""
+
   # module can be nested
   module Hi
     private HELLO = "hello"
