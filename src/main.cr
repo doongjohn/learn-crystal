@@ -1,10 +1,6 @@
-# module
-# - https://codingpackets.com/blog/crystal-notes-modules/
-# - https://crystal-lang.org/reference/1.10/syntax_and_semantics/modules.html
-
-# module is similar to c-sharp `static class`
-# so module can not be instantiated unlike class
-# but it can be used as a mixin via `include` or `extend`
+# module is similar to c-sharp `static class` and `namespace`
+# module can not be instantiated unlike class
+# module can be used as a mixin via `include` or `extend`
 # - An `include` makes a type include methods defined in that module as instance methods
 # - An `extend` makes a type include methods defined in that module as class methods (static method)
 module LearnCrystal
@@ -29,6 +25,12 @@ module LearnCrystal
   end
 
   Hi.say_hi
+  puts ""
+
+  # proc
+  # https://crystal-lang.org/reference/1.11/syntax_and_semantics/literals/proc.html
+  say_hi_proc = ->Hi.say_hi
+  p! say_hi_proc.call
   puts ""
 
   # variable
@@ -67,8 +69,7 @@ module LearnCrystal
 
   # constant
   HELLO = "hello"
-
-  # HELLO = "asd" # <-- error: already initialized constant LearnCrystal::HELLO
+  # HELLO = "" # <-- error: already initialized constant LearnCrystal::HELLO
 
   # method
   def self.hi : Nil
@@ -110,6 +111,20 @@ module LearnCrystal
   puts "#{"hello".upcase}"                 # <-- string interpolation
   puts "escape string interpolation \#{s}" # <-- escape string interpolation
   puts %w(this is a string)                # <-- this returns an array of string (split by space)
+  puts ""
+
+  # char is unicode character
+  p! STDIN.read_char()
+  gets
+
+  print "input string: "
+  input_str = gets
+  if input_str
+    # loop each char in string
+    input_str.each_char do |char|
+      p! char
+    end
+  end
   puts ""
 
   # array
@@ -282,10 +297,11 @@ module LearnCrystal
     else
       ""
     end
+
   if !shell.empty?
     puts "running shell command..."
-    output = `#{shell} -c "echo foo"`
-    puts output    # => "foo\n"
+    output = `#{shell} -c "echo "hello world""`
+    puts output    # => "hello world\n"
     p! $?.success? # => true
     puts ""
 
