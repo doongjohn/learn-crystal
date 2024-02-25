@@ -314,45 +314,45 @@ module LearnCrystal
 end
 
 class Protocol
-  module ClientInterface # <-- Interface via Module
-    abstract def protocol_send_data(data)
-    abstract def protocol_read_data(data)
+  module Interface # <-- Interface via Module
+    abstract def send_data(data)
+    abstract def read_data(data)
   end
 
-  include Protocol::ClientInterface
+  include Protocol::Interface
 
-  def initialize(@client : ClientInterface)
+  def initialize(@client : Interface)
     clients = [@client]
-    clients[0].protocol_send_data "wow"
+    clients[0].send_data "wow"
   end
 
-  def protocol_send_data(data)
-    @client.protocol_send_data data
+  def send_data(data)
+    @client.send_data data
   end
 
-  def protocol_read_data(data)
-    @client.protocol_read_data data
+  def read_data(data)
+    @client.read_data data
   end
 end
 
 class MyClient
-  include Protocol::ClientInterface
+  include Protocol::Interface
 
-  def protocol_send_data(data)
+  def send_data(data)
     puts "#{data} from MyClient"
   end
 
-  def protocol_read_data(data)
+  def read_data(data)
     puts "#{data} from MyClient"
   end
 end
 
 p = Protocol.new(MyClient.new)
-p.protocol_send_data "hello"
+p.send_data "hello"
 puts ""
 
 # you can extend already existing class
-# (`class` in crystal == `partial class` in c-sharp)
+# `class` in crystal == `partial class` in c-sharp
 class MyClient
   def hi
     puts "MyClient.hi"
