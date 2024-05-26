@@ -69,6 +69,7 @@ module LearnCrystal
 
   # constant
   HELLO = "hello"
+
   # HELLO = "" # <-- error: already initialized constant LearnCrystal::HELLO
 
   # method
@@ -114,7 +115,7 @@ module LearnCrystal
   puts ""
 
   # char is unicode character
-  p! STDIN.read_char()
+  p! STDIN.read_char
   gets
 
   print "input string: "
